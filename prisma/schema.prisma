@@ -1,0 +1,149 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id           String   @id @default(uuid())
+  email        String   @unique
+  username     String   @unique
+  passwordHash String   @map("password_hash")
+  refreshToken String?  @map("refresh_token")
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @updatedAt @map("updated_at")
+
+  watchlist     Watchlist[]
+  alerts        Alert[]
+  portfolio     Portfolio[]
+  trades        Trade[]
+  hostedRooms   Room[]         @relation("RoomHost")
+  roomMembers   RoomMember[]
+  notifications Notification[]
+
+  @@map("users")
+}
+
+model Watchlist {
+  id        String   @id @default(uuid())
+  userId    String   @map("user_id")
+  symbol    String
+  createdAt DateTime @default(now()) @map("created_at")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, symbol])
+  @@map("watchlists")
+}
+
+enum AlertCondition {
+  ABOVE
+  BELOW
+}
+
+model Alert {
+  id          String         @id @default(uuid())
+  userId      String         @map("user_id")
+  symbol      String
+  price       Decimal        @db.Decimal(18, 8)
+  condition   AlertCondition
+  isActive    Boolean        @default(true) @map("is_active")
+  triggeredAt DateTime?      @map("triggered_at")
+  createdAt   DateTime       @default(now()) @map("created_at")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("alerts")
+}
+
+model Portfolio {
+  id        String   @id @default(uuid())
+  userId    String   @map("user_id")
+  asset     String
+  balance   Decimal  @default(0) @db.Decimal(18, 8)
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, asset])
+  @@map("portfolios")
+}
+
+enum TradeType {
+  BUY
+  SELL
+}
+
+model Trade {
+  id        String    @id @default(uuid())
+  userId    String    @map("user_id")
+  symbol    String
+  type      TradeType
+  price     Decimal   @db.Decimal(18, 8)
+  amount    Decimal   @db.Decimal(18, 8)
+  total     Decimal   @db.Decimal(18, 8)
+  createdAt DateTime  @default(now()) @map("created_at")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("trades")
+}
+
+model Room {
+  id        String   @id @default(uuid())
+  name      String
+  hostId    String   @map("host_id")
+  isPublic  Boolean  @default(true) @map("is_public")
+  createdAt DateTime @default(now()) @map("created_at")
+
+  host    User         @relation("RoomHost", fields: [hostId], references: [id])
+  members RoomMember[]
+
+  @@map("rooms")
+}
+
+model RoomMember {
+  id       String   @id @default(uuid())
+  roomId   String   @map("room_id")
+  userId   String   @map("user_id")
+  joinedAt DateTime @default(now()) @map("joined_at")
+
+  room Room @relation(fields: [roomId], references: [id], onDelete: Cascade)
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([roomId, userId])
+  @@map("room_members")
+}
+
+model Notification {
+  id        String   @id @default(uuid())
+  userId    String   @map("user_id")
+  type      String
+  title     String
+  body      String
+  isRead    Boolean  @default(false) @map("is_read")
+  createdAt DateTime @default(now()) @map("created_at")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("notifications")
+}
+
+model PriceHistory {
+  id        String   @id @default(uuid())
+  symbol    String
+  interval  String
+  open      Decimal  @db.Decimal(18, 8)
+  high      Decimal  @db.Decimal(18, 8)
+  low       Decimal  @db.Decimal(18, 8)
+  close     Decimal  @db.Decimal(18, 8)
+  volume    Decimal  @db.Decimal(18, 8)
+  openTime  DateTime @map("open_time")
+  closeTime DateTime @map("close_time")
+
+  @@unique([symbol, interval, openTime])
+  @@map("price_history")
+}
