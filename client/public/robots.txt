@@ -1,0 +1,9 @@
+User-agent: *
+Allow: /
+Allow: /auth
+
+Disallow: /portfolio
+Disallow: /alerts
+Disallow: /rooms
+
+Sitemap: https://maxbtc.app/sitemap.xml
