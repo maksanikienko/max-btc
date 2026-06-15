@@ -219,17 +219,17 @@ async function deposit() {
                 </span>
               </div>
               <div class="grid grid-cols-3 gap-2 text-xs">
-                <div>
+                <div class="min-w-0">
                   <p class="text-muted-foreground mb-0.5">Price</p>
-                  <p class="font-medium tabular">${{ formatPrice(trade.price) }}</p>
+                  <p class="font-medium tabular truncate">${{ formatPrice(trade.price) }}</p>
                 </div>
-                <div>
+                <div class="min-w-0">
                   <p class="text-muted-foreground mb-0.5">Amount</p>
-                  <p class="font-medium tabular">{{ parseFloat(trade.amount).toFixed(4) }}</p>
+                  <p class="font-medium tabular truncate">{{ parseFloat(trade.amount).toFixed(4) }}</p>
                 </div>
-                <div>
+                <div class="min-w-0">
                   <p class="text-muted-foreground mb-0.5">Total</p>
-                  <p class="font-semibold tabular">${{ formatPrice(trade.total) }}</p>
+                  <p class="font-semibold tabular truncate">${{ formatPrice(trade.total) }}</p>
                 </div>
               </div>
             </Card>

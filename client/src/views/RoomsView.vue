@@ -198,7 +198,7 @@ function formatTime(ts: string) {
           </div>
 
           <!-- Message input -->
-          <div class="px-4 py-3 border-t border-border/60 bg-card/10 shrink-0">
+          <div class="px-4 pt-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] border-t border-border/60 bg-card/10 shrink-0">
             <div class="flex items-center gap-2">
               <Input
                 v-model="messageText"

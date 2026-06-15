@@ -46,7 +46,7 @@ function continueWithGoogle() {
 </script>
 
 <template>
-  <div class="flex h-screen w-full items-center justify-center bg-background overflow-hidden">
+  <div class="relative flex min-h-screen w-full items-center justify-center bg-background py-8">
     <!-- Background decoration -->
     <div class="pointer-events-none absolute inset-0 overflow-hidden">
       <div class="absolute -top-40 left-1/2 -translate-x-1/2 h-80 w-80 rounded-full bg-primary/5 blur-3xl" />

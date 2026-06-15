@@ -85,14 +85,14 @@ const active = (a: typeof alerts.items[0]) => a.isActive
         </Card>
 
         <!-- Summary -->
-        <div class="grid grid-cols-3 gap-3">
+        <div class="grid grid-cols-1 xs:grid-cols-3 gap-3">
           <Card class="px-3 md:px-4 py-3 flex items-center gap-2 md:gap-3">
             <div class="flex items-center justify-center w-7 md:w-8 h-7 md:h-8 rounded-lg bg-primary/10 border border-primary/20 shrink-0">
               <Bell :size="14" class="text-primary" />
             </div>
             <div class="min-w-0">
-              <p class="text-[10px] text-muted-foreground uppercase tracking-wide">Active</p>
-              <p class="text-lg font-bold">{{ alerts.items.filter(active).length }}</p>
+              <p class="text-[10px] text-muted-foreground uppercase tracking-wide truncate">Active</p>
+              <p class="text-lg font-bold truncate">{{ alerts.items.filter(active).length }}</p>
             </div>
           </Card>
           <Card class="px-3 md:px-4 py-3 flex items-center gap-2 md:gap-3">
@@ -100,8 +100,8 @@ const active = (a: typeof alerts.items[0]) => a.isActive
               <CheckCircle2 :size="14" class="text-muted-foreground" />
             </div>
             <div class="min-w-0">
-              <p class="text-[10px] text-muted-foreground uppercase tracking-wide">Triggered</p>
-              <p class="text-lg font-bold">{{ alerts.items.filter(a => !a.isActive).length }}</p>
+              <p class="text-[10px] text-muted-foreground uppercase tracking-wide truncate">Triggered</p>
+              <p class="text-lg font-bold truncate">{{ alerts.items.filter(a => !a.isActive).length }}</p>
             </div>
           </Card>
           <Card class="px-3 md:px-4 py-3 flex items-center gap-2 md:gap-3">
@@ -109,8 +109,8 @@ const active = (a: typeof alerts.items[0]) => a.isActive
               <AlertCircle :size="14" class="text-muted-foreground" />
             </div>
             <div class="min-w-0">
-              <p class="text-[10px] text-muted-foreground uppercase tracking-wide">Total</p>
-              <p class="text-lg font-bold">{{ alerts.items.length }}</p>
+              <p class="text-[10px] text-muted-foreground uppercase tracking-wide truncate">Total</p>
+              <p class="text-lg font-bold truncate">{{ alerts.items.length }}</p>
             </div>
           </Card>
         </div>

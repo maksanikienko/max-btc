@@ -71,7 +71,7 @@ onUnmounted(() => document.removeEventListener('click', handleOutside))
 </script>
 
 <template>
-  <header class="h-13 flex items-center justify-between border-b border-border/60 bg-card/40 backdrop-blur-sm px-4 shrink-0 z-40 relative">
+  <header class="h-13 flex items-center justify-between border-b border-border/60 bg-card/40 backdrop-blur-sm pl-[max(1rem,env(safe-area-inset-left))] pr-[max(1rem,env(safe-area-inset-right))] mt-[env(safe-area-inset-top)] shrink-0 z-40 relative">
 
     <!-- Left: logo + desktop nav -->
     <div class="flex items-center gap-4">

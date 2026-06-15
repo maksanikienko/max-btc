@@ -128,7 +128,7 @@ onUnmounted(() => market.destroy())
     </div>
 
     <!-- Mobile bottom tab bar -->
-    <nav class="flex md:hidden border-t border-border/60 bg-card/40 backdrop-blur-sm shrink-0">
+    <nav class="flex md:hidden border-t border-border/60 bg-card/40 backdrop-blur-sm shrink-0 pb-[env(safe-area-inset-bottom)]">
       <button
         v-for="tab in mobileTabs"
         :key="tab.id"
