@@ -39,6 +39,10 @@ function switchTab(t: 'login' | 'register') {
   tab.value = t
   error.value = ''
 }
+
+function continueWithGoogle() {
+  window.location.href = '/api/auth/google'
+}
 </script>
 
 <template>
@@ -59,7 +63,7 @@ function switchTab(t: 'login' | 'register') {
           <TrendingUp :size="22" class="text-primary" />
         </div>
         <div class="text-center">
-          <h1 class="text-xl font-bold tracking-widest text-foreground">MAX·BTC</h1>
+          <h1 class="text-xl font-bold tracking-widest text-foreground">BTC·MAX</h1>
           <p class="text-xs text-muted-foreground mt-1 flex items-center justify-center gap-1">
             <Zap :size="10" class="text-primary/60" />
             Crypto Trading Terminal
@@ -100,7 +104,7 @@ function switchTab(t: 'login' | 'register') {
                 id="email"
                 v-model="email"
                 type="email"
-                placeholder="trader@example.com"
+                placeholder="user@gmail.com"
                 class="pl-9"
                 :disabled="loading"
               />
@@ -114,7 +118,7 @@ function switchTab(t: 'login' | 'register') {
               <Input
                 id="username"
                 v-model="username"
-                placeholder="satoshi"
+                placeholder="username"
                 class="pl-9"
                 :disabled="loading"
               />
@@ -145,6 +149,23 @@ function switchTab(t: 'login' | 'register') {
           <Button type="submit" class="w-full mt-2" size="lg" :loading="loading">
             {{ tab === 'login' ? 'Sign In' : 'Create Account' }}
             <ArrowRight v-if="!loading" :size="16" />
+          </Button>
+
+          <div class="relative py-1">
+            <Separator class="opacity-40" />
+            <span class="absolute inset-0 flex items-center justify-center text-[10px] uppercase tracking-wider text-muted-foreground/60 bg-card/80 px-2 mx-auto w-fit">
+              or
+            </span>
+          </div>
+
+          <Button type="button" variant="outline" class="w-full" size="lg" @click="continueWithGoogle">
+            <svg width="16" height="16" viewBox="0 0 24 24">
+              <path fill="#4285F4" d="M23.49 12.27c0-.79-.07-1.54-.2-2.27H12v4.51h6.47c-.28 1.48-1.13 2.73-2.41 3.58v2.97h3.86c2.26-2.09 3.57-5.17 3.57-8.79z" />
+              <path fill="#34A853" d="M12 24c3.24 0 5.95-1.08 7.93-2.91l-3.86-2.97c-1.07.72-2.45 1.15-4.07 1.15-3.13 0-5.78-2.11-6.73-4.96H1.27v3.07C3.26 21.3 7.31 24 12 24z" />
+              <path fill="#FBBC05" d="M5.27 14.31a7.2 7.2 0 0 1-.38-2.31c0-.8.14-1.58.38-2.31V6.62H1.27A11.97 11.97 0 0 0 0 12c0 1.93.46 3.76 1.27 5.38l4-3.07z" />
+              <path fill="#EA4335" d="M12 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C17.95 1.19 15.24 0 12 0 7.31 0 3.26 2.7 1.27 6.62l4 3.07C6.22 6.85 8.87 4.75 12 4.75z" />
+            </svg>
+            Continue with Google
           </Button>
         </form>
 

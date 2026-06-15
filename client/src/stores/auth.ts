@@ -25,6 +25,12 @@ export const useAuthStore = defineStore('auth', () => {
     socket.connect()
   }
 
+  async function loginWithTokens(accessToken: string, refreshToken: string) {
+    _setTokens(accessToken, refreshToken)
+    await fetchProfile()
+    socket.connect()
+  }
+
   async function fetchProfile() {
     const { data } = await api.get('/users/me')
     user.value = data
@@ -49,5 +55,5 @@ export const useAuthStore = defineStore('auth', () => {
     localStorage.removeItem('refreshToken')
   }
 
-  return { accessToken, user, isAuthenticated, login, register, logout, fetchProfile }
+  return { accessToken, user, isAuthenticated, login, register, loginWithTokens, logout, fetchProfile }
 })
