@@ -1,98 +1,222 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+# Max BTC — Crypto Trading Terminal
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+A full-stack crypto trading terminal with real-time market data, virtual portfolio management, price alerts, and collaborative trading rooms.
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+**Backend:** NestJS 11 · TypeScript · PostgreSQL + Prisma 6 · Socket.io · Binance WebSocket  
+**Frontend:** Vue 3 · Vite · Pinia · Tailwind CSS · lightweight-charts
 
-## Description
+---
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+## Features
 
-## Project setup
+- **Live market data** — real-time ticker prices streamed from Binance via WebSocket
+- **Candlestick charts** — interactive TradingView-style charts powered by lightweight-charts
+- **Virtual portfolio** — paper trading with balance tracking and trade history
+- **Watchlist** — per-user symbol lists with live price updates
+- **Price alerts** — configurable alerts checked every 10 seconds
+- **Collaborative rooms** — shared trading rooms with real-time chat
+- **In-app notifications** — alert triggers and room events
+- **Authentication** — JWT-based auth (access + refresh tokens) with Google OAuth support
 
-```bash
-$ npm install
+---
+
+## Tech Stack
+
+| Layer | Technology |
+|---|---|
+| API | NestJS 11, TypeScript, Passport, JWT |
+| Database | PostgreSQL, Prisma 6 |
+| Real-time | Socket.io, Binance WebSocket stream |
+| Scheduler | `@nestjs/schedule` (price alert cron) |
+| Frontend | Vue 3 (Composition API), Vite, Pinia, vue-router |
+| UI | Tailwind CSS, radix-vue, class-variance-authority |
+| Charts | lightweight-charts |
+| HTTP client | Axios (with JWT refresh interceptor) |
+
+---
+
+## Repository Structure
+
+```
+max-btc/
+├── src/                  # NestJS backend
+│   ├── common/           # Guards, decorators, filters
+│   ├── config/           # Typed env configuration
+│   ├── database/         # PrismaService (global)
+│   ├── services/         # BinanceWsService (global)
+│   ├── gateways/         # Socket.io /trading namespace
+│   └── modules/          # auth, user, market, watchlist, alert, portfolio, room, notification
+├── prisma/               # schema.prisma + migrations
+├── client/               # Vue 3 SPA
+│   └── src/
+│       ├── components/   # Chart, TickerBar, TradePanel, Watchlist, UI primitives
+│       ├── stores/       # Pinia stores (auth, market, portfolio, alerts, rooms, notifications)
+│       ├── views/        # AuthView, TerminalView, PortfolioView, AlertsView, RoomsView
+│       ├── services/     # Shared axios instance + socket.io-client
+│       └── router/       # vue-router + auth guard
+└── test/                 # Jest e2e config
 ```
 
-## Compile and run the project
+---
+
+## Getting Started
+
+### Prerequisites
+
+- Node.js 20+
+- PostgreSQL 15+
+- A [Binance](https://www.binance.com) account is **not** required — the app uses the public WebSocket stream
+
+### 1. Clone and install
 
 ```bash
-# development
-$ npm run start
-
-# watch mode
-$ npm run start:dev
-
-# production mode
-$ npm run start:prod
+git clone <repo-url>
+cd max-btc
+npm install
+cd client && npm install && cd ..
 ```
 
-## Run tests
+### 2. Configure environment
 
 ```bash
-# unit tests
-$ npm run test
-
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
+cp .env.example .env
 ```
 
-## Deployment
+Edit `.env` and fill in the required values:
 
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
+| Variable | Description |
+|---|---|
+| `DATABASE_URL` | PostgreSQL connection string |
+| `JWT_SECRET` | Secret for access tokens |
+| `JWT_REFRESH_SECRET` | Secret for refresh tokens |
+| `GOOGLE_CLIENT_ID` | Google OAuth client ID (optional) |
+| `GOOGLE_CLIENT_SECRET` | Google OAuth client secret (optional) |
+| `GOOGLE_CALLBACK_URL` | Must match the redirect URI in Google Cloud Console |
+| `FRONTEND_URL` | Frontend origin (default: `http://localhost:5173`) |
 
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
+### 3. Run database migrations
 
 ```bash
-$ npm install -g @nestjs/mau
-$ mau deploy
+npx prisma migrate dev --name init
 ```
 
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
+### 4. Start the development servers
 
-## Resources
+**Terminal 1 — API (port 3000):**
 
-Check out a few resources that may come in handy when working with NestJS:
+```bash
+npm run start:dev
+```
 
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
+**Terminal 2 — Frontend (port 5173):**
 
-## Support
+```bash
+cd client
+npm run dev
+```
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+Open `http://localhost:5173` in your browser.
 
-## Stay in touch
+---
 
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+## Google OAuth Setup (Optional)
+
+1. Go to [Google Cloud Console](https://console.cloud.google.com/) → APIs & Services → Credentials
+2. Create an OAuth 2.0 Client ID (Web application)
+3. Add `http://localhost:3000/api/auth/google/callback` as an **Authorized redirect URI**
+4. Copy the Client ID and Client Secret into your `.env`
+
+---
+
+## API Overview
+
+```
+POST   /api/auth/register
+POST   /api/auth/login
+POST   /api/auth/refresh
+POST   /api/auth/logout
+GET    /api/auth/google
+GET    /api/auth/google/callback
+
+GET    /api/users/me
+PATCH  /api/users/me
+
+GET    /api/market/tickers
+GET    /api/market/ticker/:symbol
+
+GET    /api/watchlist
+POST   /api/watchlist
+DELETE /api/watchlist/:symbol
+
+GET    /api/alerts
+POST   /api/alerts
+DELETE /api/alerts/:id
+
+GET    /api/portfolio
+GET    /api/portfolio/trades
+POST   /api/portfolio/trade
+POST   /api/portfolio/deposit
+
+GET    /api/rooms
+POST   /api/rooms
+GET    /api/rooms/:id
+POST   /api/rooms/:id/join
+POST   /api/rooms/:id/leave
+DELETE /api/rooms/:id
+
+GET    /api/notifications
+PATCH  /api/notifications/:id/read
+PATCH  /api/notifications/read-all
+```
+
+All protected routes require `Authorization: Bearer <accessToken>`.
+
+---
+
+## WebSocket Events (`/trading` namespace)
+
+### Client → Server
+
+| Event | Payload | Effect |
+|---|---|---|
+| `subscribe:ticker` | `"BTCUSDT"` | Join ticker room, receive live updates |
+| `unsubscribe:ticker` | `"BTCUSDT"` | Leave ticker room |
+| `joinRoom` | `"roomId"` | Join a trading room |
+| `leaveRoom` | `"roomId"` | Leave a trading room |
+| `room:message` | `{ roomId, message }` | Broadcast message to room members |
+
+### Server → Client
+
+| Event | Trigger |
+|---|---|
+| `ticker` | Binance price update for subscribed symbol |
+| `room:userJoined` | A user joined the room |
+| `room:userLeft` | A user left the room |
+| `room:message` | Chat message from a room member |
+
+---
+
+## Scripts
+
+```bash
+# Backend (repo root)
+npm run start:dev       # development with hot reload
+npm run start:prod      # production
+npm run build           # compile TypeScript
+npm run test            # unit tests
+npm run test:e2e        # end-to-end tests
+npm run test:cov        # test coverage
+npm run lint            # ESLint
+npx prisma studio       # Prisma Studio GUI
+
+# Frontend (client/)
+npm run dev             # Vite dev server
+npm run build           # production build (type-checks + Vite)
+npm run preview         # preview production build
+```
+
+---
 
 ## License
 
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+This project is licensed under the MIT License. See [LICENSE](LICENSE) for details.
