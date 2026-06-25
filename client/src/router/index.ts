@@ -34,6 +34,11 @@ const router = createRouter({
       component: () => import('@/views/RoomsView.vue'),
       meta: { requiresAuth: true },
     },
+    {
+      path: '/wallet',
+      component: () => import('@/views/WalletView.vue'),
+      meta: { requiresAuth: true },
+    },
     { path: '/:pathMatch(.*)*', redirect: '/' },
   ],
 });

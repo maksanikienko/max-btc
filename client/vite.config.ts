@@ -4,6 +4,10 @@ import path from 'path';
 
 export default defineConfig({
   plugins: [vue()],
+  // web3.js v4 uses globalThis APIs — this shim covers any remaining references
+  define: {
+    global: 'globalThis',
+  },
   resolve: {
     alias: { '@': path.resolve(__dirname, './src') },
   },

@@ -23,4 +23,8 @@ export default () => ({
       'http://localhost:3000/api/auth/google/callback',
   },
   frontendUrl: process.env.FRONTEND_URL || 'http://localhost:5173',
+  ethereum: {
+    rpcUrl: process.env.ETHEREUM_RPC_URL || 'https://cloudflare-eth.com',
+    sepoliaRpcUrl: process.env.SEPOLIA_RPC_URL || 'https://rpc.sepolia.org',
+  },
 });

@@ -13,6 +13,7 @@ import { AlertModule } from './modules/alert/alert.module';
 import { PortfolioModule } from './modules/portfolio/portfolio.module';
 import { RoomModule } from './modules/room/room.module';
 import { NotificationModule } from './modules/notification/notification.module';
+import { BlockchainModule } from './modules/blockchain/blockchain.module';
 
 @Module({
   imports: [
@@ -29,6 +30,7 @@ import { NotificationModule } from './modules/notification/notification.module';
     PortfolioModule,
     RoomModule,
     NotificationModule,
+    BlockchainModule,
   ],
 })
 export class AppModule {}

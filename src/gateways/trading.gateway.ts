@@ -11,6 +11,7 @@ import {
 import { Logger } from '@nestjs/common';
 import { Server, Socket } from 'socket.io';
 import { BinanceWsService } from '../services/binance-ws.service';
+import { BlockchainService, type Network } from '../modules/blockchain/blockchain.service';
 
 @WebSocketGateway({ namespace: '/trading', cors: { origin: '*' } })
 export class TradingGateway
@@ -19,7 +20,10 @@ export class TradingGateway
   @WebSocketServer() server: Server;
   private readonly logger = new Logger(TradingGateway.name);
 
-  constructor(private binanceWs: BinanceWsService) {}
+  constructor(
+    private binanceWs: BinanceWsService,
+    private blockchain: BlockchainService,
+  ) {}
 
   afterInit() {
     this.binanceWs.ticker$.subscribe((ticker) => {
@@ -87,5 +91,30 @@ export class TradingGateway
       message: payload.message,
       timestamp: new Date().toISOString(),
     });
+  }
+
+  /**
+   * Client asks the backend to watch a submitted transaction.
+   * The server polls the RPC until confirmed/failed and pushes tx:status
+   * back to the requesting socket — other connected sessions of the same
+   * user would receive the update automatically.
+   */
+  @SubscribeMessage('tx:watch')
+  handleTxWatch(
+    @ConnectedSocket() client: Socket,
+    @MessageBody() payload: { hash: string; network?: Network },
+  ) {
+    const network: Network = payload.network === 'mainnet' ? 'mainnet' : 'sepolia';
+
+    this.blockchain.pollTransactionReceipt(
+      payload.hash,
+      network,
+      (status, blockNumber) => {
+        client.emit('tx:status', { hash: payload.hash, status, blockNumber });
+      },
+    );
+
+    this.logger.log(`Watching tx ${payload.hash} on ${network}`);
+    return { watching: payload.hash };
   }
 }

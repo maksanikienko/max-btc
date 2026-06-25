@@ -12,8 +12,9 @@ model User {
   email        String   @unique
   username     String   @unique
   passwordHash String?  @map("password_hash")
-  googleId     String?  @unique @map("google_id")
-  avatarUrl    String?  @map("avatar_url")
+  googleId      String?  @unique @map("google_id")
+  avatarUrl     String?  @map("avatar_url")
+  walletAddress String?  @unique @map("wallet_address")
   refreshToken String?  @map("refresh_token")
   createdAt    DateTime @default(now()) @map("created_at")
   updatedAt    DateTime @updatedAt @map("updated_at")

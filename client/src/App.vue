@@ -3,6 +3,7 @@ import { onMounted, onUnmounted } from 'vue'
 import { useAuthStore } from '@/stores/auth'
 import { useNotificationsStore } from '@/stores/notifications'
 import { socket } from '@/services/socket'
+import ToastContainer from '@/components/ui/ToastContainer.vue'
 
 const auth = useAuthStore()
 const notifs = useNotificationsStore()
@@ -24,4 +25,5 @@ onUnmounted(() => notifs.stopPolling())
 
 <template>
   <RouterView />
+  <ToastContainer />
 </template>

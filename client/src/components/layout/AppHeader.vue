@@ -3,12 +3,17 @@ import { ref, onMounted, onUnmounted } from 'vue'
 import { RouterLink, useRouter } from 'vue-router'
 import {
   TrendingUp, Bell, LogOut, LayoutDashboard, Briefcase, Bell as AlertBell,
-  Users, CheckCheck, AlertCircle, Menu, X,
+  Users, CheckCheck, AlertCircle, Menu, X, Wallet,
 } from 'lucide-vue-next'
 import { useAuthStore } from '@/stores/auth'
 import { useNotificationsStore } from '@/stores/notifications'
 import ScrollArea from '@/components/ui/ScrollArea.vue'
 import Separator from '@/components/ui/Separator.vue'
+import WalletConnect from '@/components/wallet/WalletConnect.vue'
+import { useMetaMask } from '@/composables/useMetaMask'
+
+// Registers MetaMask event listeners for the duration of the auth session
+useMetaMask()
 
 const auth = useAuthStore()
 const notifs = useNotificationsStore()
@@ -22,6 +27,7 @@ const nav = [
   { to: '/portfolio', label: 'Portfolio', icon: Briefcase },
   { to: '/alerts', label: 'Alerts', icon: AlertBell },
   { to: '/rooms', label: 'Rooms', icon: Users },
+  { to: '/wallet', label: 'Wallet', icon: Wallet },
 ]
 
 function toggleBell(e: Event) {
@@ -105,8 +111,13 @@ onUnmounted(() => document.removeEventListener('click', handleOutside))
       </nav>
     </div>
 
-    <!-- Right: bell + user + hamburger -->
+    <!-- Right: wallet + bell + user + hamburger -->
     <div class="flex items-center gap-1.5">
+
+      <!-- Wallet connect widget -->
+      <WalletConnect />
+
+      <Separator orientation="vertical" class="hidden md:block h-5 opacity-50" />
 
       <!-- Bell -->
       <div class="relative" data-header-popup>
